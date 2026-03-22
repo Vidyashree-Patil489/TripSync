@@ -1,0 +1,599 @@
+/* ── CURSOR ── */
+const C1=document.getElementById('C1'),C2=document.getElementById('C2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function ac(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;C1.style.left=mx+'px';C1.style.top=my+'px';C2.style.left=rx+'px';C2.style.top=ry+'px';requestAnimationFrame(ac);})();
+
+/* ── STARS ── */
+const sc=document.getElementById('stars');
+sc.width=window.innerWidth;sc.height=window.innerHeight;
+const sx=sc.getContext('2d');
+for(let i=0;i<220;i++){const x=Math.random()*sc.width,y=Math.random()*sc.height,r=Math.random()*1.1;sx.beginPath();sx.arc(x,y,r,0,Math.PI*2);sx.fillStyle='rgba(237,245,255,'+(Math.random()*.55+.1)+')';sx.fill();}
+
+/* ── PAGES ── */
+const PGS=['pg1','pg2','pg3','pg4','pg5','pg6'];
+const ndots=document.getElementById('ndots');
+PGS.forEach((_,i)=>{const d=document.createElement('div');d.className='nd'+(i===0?' on':'');d.onclick=()=>goTo(i);ndots.appendChild(d);});
+function goTo(i){document.getElementById(PGS[i])?.scrollIntoView({behavior:'smooth'});}
+const pObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.5){const i=PGS.indexOf(e.target.id);if(i>=0)document.querySelectorAll('.nd').forEach((d,j)=>d.classList.toggle('on',j===i));}});},{threshold:.5});
+PGS.forEach(id=>{const el=document.getElementById(id);if(el)pObs.observe(el);});
+
+/* ── MARQUEE ── */
+const mpl=['Bali','Tokyo','Athens','Mumbai','Maldives','Paris','Manali','Dubai','Bangkok','Prague','Kyoto','Santorini','Nairobi','New York','Istanbul','Goa','Reykjavik','Sydney'];
+const mqt=document.getElementById('mqt');
+[...mpl,...mpl].forEach(p=>{const d=document.createElement('div');d.className='mqi';d.innerHTML='<b>\u2756</b> '+p;mqt.appendChild(d);});
+
+/* ── DATA ── */
+const DESTS=[
+  {city:'Goa',country:'India',emoji:'\uD83C\uDFD6\uFE0F',region:'asia',budget:125000,flight:2,tags:['Beach','Nightlife','Food'],desc:'Sun-soaked beaches, Portuguese forts, legendary parties and fresh seafood.',img:'https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?w=400&q=75'},
+  {city:'Manali',country:'India',emoji:'\uD83C\uDFD4\uFE0F',region:'asia',budget:100000,flight:2,tags:['Mountains','Adventure','Snow'],desc:'Snow-capped Himalayas, river valleys, and thrilling passes at 4000m.',img:'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400&q=75'},
+  {city:'Jaipur',country:'India',emoji:'\uD83C\uDFF0',region:'asia',budget:90000,flight:2,tags:['History','Culture','Food'],desc:'The Pink City - Amber Fort, palaces, and the best dal baati you will ever eat.',img:'https://images.unsplash.com/photo-1587295656906-b2df9426fae5?w=400&q=75'},
+  {city:'Kerala',country:'India',emoji:'\uD83C\uDF34',region:'asia',budget:110000,flight:3,tags:['Backwaters','Wellness','Nature'],desc:'Houseboat stays on serene backwaters, spice gardens and Ayurvedic retreats.',img:'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=75'},
+  {city:'Varanasi',country:'India',emoji:'\uD83D\uDED5',region:'asia',budget:75000,flight:2,tags:['Spiritual','Culture','Ghats'],desc:'Dawn rituals on the Ganga, ancient ghats, and timeless spiritual energy.',img:'https://images.unsplash.com/photo-1561361058-c24e021e2979?w=400&q=75'},
+  {city:'Andaman Islands',country:'India',emoji:'\uD83D\uDC20',region:'asia',budget:175000,flight:3,tags:['Beach','Diving','Nature'],desc:'Crystal turquoise waters, coral reefs, untouched islands and bioluminescent nights.',img:'https://images.unsplash.com/photo-1586500036706-41963de24d8b?w=400&q=75'},
+  {city:'Bali',country:'Indonesia',emoji:'\uD83C\uDF34',region:'asia',budget:400000,flight:6,tags:['Beach','Culture','Wellness'],desc:'Rice terraces, Hindu temples, world-class surf and the most magical sunsets.',img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=75'},
+  {city:'Bangkok',country:'Thailand',emoji:'\uD83D\uDEFA',region:'asia',budget:350000,flight:4,tags:['Food','Culture','Nightlife'],desc:'Street food paradise, gilded temples, tuk-tuks, and electric Khao San energy.',img:'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=400&q=75'},
+  {city:'Phuket',country:'Thailand',emoji:'\uD83C\uDFDD\uFE0F',region:'asia',budget:425000,flight:5,tags:['Beach','Diving','Resorts'],desc:'Andaman Sea turquoise coves, limestone cliffs and vibrant Patong Beach.',img:'https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=400&q=75'},
+  {city:'Hanoi',country:'Vietnam',emoji:'\uD83C\uDF5C',region:'asia',budget:300000,flight:5,tags:['Food','History','Culture'],desc:'French-colonial Old Quarter, pho at dawn, Halong Bay just 4 hours away.',img:'https://images.unsplash.com/photo-1555921015-5532091f6026?w=400&q=75'},
+  {city:'Singapore',country:'Singapore',emoji:'\uD83C\uDF03',region:'asia',budget:750000,flight:6,tags:['Modern','Food','Gardens'],desc:'Futuristic city-state with hawker centres, Gardens by the Bay and spotless streets.',img:'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=400&q=75'},
+  {city:'Tokyo',country:'Japan',emoji:'\uD83C\uDFEF',region:'asia',budget:900000,flight:9,tags:['Food','Culture','Nightlife'],desc:'Neon-lit alleys, ancient temples, world-class ramen, and cherry blossoms.',img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=75'},
+  {city:'Kyoto',country:'Japan',emoji:'\uD83C\uDF38',region:'asia',budget:850000,flight:9,tags:['Temples','Culture','Tradition'],desc:'Bamboo groves, geisha districts, thousands of torii gates and ancient zen gardens.',img:'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&q=75'},
+  {city:'Seoul',country:'South Korea',emoji:'\uD83C\uDF8E',region:'asia',budget:650000,flight:7,tags:['K-Pop','Food','Shopping'],desc:'K-pop, kimchi, palace culture, and one of the world most dynamic cities.',img:'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&q=75'},
+  {city:'Dubai',country:'UAE',emoji:'\uD83C\uDF06',region:'asia',budget:800000,flight:4,tags:['Luxury','Desert','Shopping'],desc:'Burj Khalifa, desert safaris, gold souks and the world most ambitious architecture.',img:'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&q=75'},
+  {city:'Istanbul',country:'Turkey',emoji:'\uD83D\uDD4C',region:'asia',budget:500000,flight:7,tags:['History','Food','Bazaars'],desc:'Hagia Sophia, Grand Bazaar, Bosphorus cruises - where East meets West.',img:'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=400&q=75'},
+  {city:'Maldives',country:'Maldives',emoji:'\uD83C\uDFDD\uFE0F',region:'asia',budget:1200000,flight:4,tags:['Overwater Villas','Diving','Romance'],desc:'Crystal lagoons, overwater bungalows, manta rays, and absolute paradise.',img:'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&q=75'},
+  {city:'Colombo',country:'Sri Lanka',emoji:'\uD83C\uDF3F',region:'asia',budget:250000,flight:3,tags:['Tea Gardens','Wildlife','Beaches'],desc:'Tea estates, ancient ruins, elephants, and stunning colonial coastline.',img:'https://images.unsplash.com/photo-1546708973-b339540b5162?w=400&q=75'},
+  {city:'Kathmandu',country:'Nepal',emoji:'\uD83C\uDFD4\uFE0F',region:'asia',budget:200000,flight:3,tags:['Himalayas','Trekking','Spiritual'],desc:'Gateway to Everest, living goddess temples, and the most dramatic mountain views.',img:'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=400&q=75'},
+  {city:'Tbilisi',country:'Georgia',emoji:'\uD83C\uDF77',region:'asia',budget:400000,flight:5,tags:['Wine','Culture','Old Town'],desc:'World oldest wine region, sulphur bath houses, and gorgeous Old Town balconies.',img:'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=400&q=75'},
+  {city:'Paris',country:'France',emoji:'\uD83C\uDF80',region:'europe',budget:1200000,flight:10,tags:['Art','Romance','Food'],desc:'Eiffel Tower, Louvre, croissants at dawn, and the most romantic city on Earth.',img:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=75'},
+  {city:'Barcelona',country:'Spain',emoji:'\uD83C\uDFD6\uFE0F',region:'europe',budget:900000,flight:10,tags:['Architecture','Beach','Nightlife'],desc:'Gaudi buildings, Las Ramblas, Gothic Quarter, and Mediterranean beaches.',img:'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=400&q=75'},
+  {city:'Rome',country:'Italy',emoji:'\uD83C\uDFDB\uFE0F',region:'europe',budget:950000,flight:9,tags:['History','Food','Art'],desc:'Colosseum, Vatican, carbonara, gelato - 3000 years of civilisation in one city.',img:'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&q=75'},
+  {city:'Athens',country:'Greece',emoji:'\uD83C\uDFFA',region:'europe',budget:750000,flight:8,tags:['History','Food','Islands'],desc:'Acropolis at golden hour, mezze, island-hopping, and turquoise Aegean waters.',img:'https://images.unsplash.com/photo-1555993539-1732b0258235?w=400&q=75'},
+  {city:'Prague',country:'Czech Republic',emoji:'\uD83C\uDFAD',region:'europe',budget:700000,flight:10,tags:['Architecture','Beer','History'],desc:'Fairy-tale Old Town, astronomical clock, Czech beer culture, and Gothic spires.',img:'https://images.unsplash.com/photo-1541849546-216549ae216d?w=400&q=75'},
+  {city:'Amsterdam',country:'Netherlands',emoji:'\uD83D\uDEB2',region:'europe',budget:950000,flight:10,tags:['Canals','Art','Culture'],desc:'Canal rings, Van Gogh Museum, tulip fields, and the most bicycle-friendly city.',img:'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&q=75'},
+  {city:'Santorini',country:'Greece',emoji:'\uD83C\uDF05',region:'europe',budget:1000000,flight:9,tags:['Sunsets','Beaches','Wine'],desc:'Blue-domed churches, caldera views, volcanic beaches, and legendary sunsets.',img:'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=400&q=75'},
+  {city:'Lisbon',country:'Portugal',emoji:'\uD83C\uDFB5',region:'europe',budget:700000,flight:11,tags:['Fado','Trams','Food'],desc:'Yellow trams, fado music, custard tarts, and seven iconic hills.',img:'https://images.unsplash.com/photo-1548707309-dcebeab9ea9b?w=400&q=75'},
+  {city:'Reykjavik',country:'Iceland',emoji:'\uD83C\uDF0C',region:'europe',budget:1500000,flight:14,tags:['Northern Lights','Geysers','Midnight Sun'],desc:'Aurora borealis, geysers, glacier hikes, hot springs, and 24-hour daylight.',img:'https://images.unsplash.com/photo-1504233529578-6d46baba6d34?w=400&q=75'},
+  {city:'Dubrovnik',country:'Croatia',emoji:'\uD83C\uDFF0',region:'europe',budget:800000,flight:10,tags:['Old Town','Adriatic','History'],desc:'Walled medieval city, crystal Adriatic, and one of Europes most beautiful coasts.',img:'https://images.unsplash.com/photo-1555990538-c4f0eff93ac6?w=400&q=75'},
+  {city:'New York',country:'USA',emoji:'\uD83D\uDDFD',region:'north_america',budget:1600000,flight:16,tags:['City','Culture','Food'],desc:'Times Square, Central Park, Brooklyn Bridge - the city that never sleeps.',img:'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400&q=75'},
+  {city:'Cancun',country:'Mexico',emoji:'\uD83C\uDFD6\uFE0F',region:'north_america',budget:700000,flight:16,tags:['Beach','Resorts','Ruins'],desc:'Caribbean turquoise waters, Mayan ruins at Chichen Itza, world-class resorts.',img:'https://images.unsplash.com/photo-1510097467424-192d713fd8b2?w=400&q=75'},
+  {city:'Mexico City',country:'Mexico',emoji:'\uD83C\uDF2E',region:'north_america',budget:600000,flight:16,tags:['Food','Culture','History'],desc:'Aztec pyramids, world-class tacos, Frida Kahlo museums, and incredible murals.',img:'https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?w=400&q=75'},
+  {city:'Havana',country:'Cuba',emoji:'\uD83D\uDE97',region:'north_america',budget:900000,flight:18,tags:['Vintage Cars','Salsa','History'],desc:'1950s vintage cars, rooftop salsa, Malecon sunsets, and timeless history.',img:'https://images.unsplash.com/photo-1500759285222-a95626b934cb?w=400&q=75'},
+  {city:'Jamaica',country:'Jamaica',emoji:'\uD83C\uDFB5',region:'north_america',budget:800000,flight:17,tags:['Reggae','Beach','Waterfalls'],desc:'Bob Marleys homeland, Dunns River Falls, jerk chicken, and laid-back vibes.',img:'https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=400&q=75'},
+  {city:'Rio de Janeiro',country:'Brazil',emoji:'\uD83C\uDFAD',region:'south_america',budget:1100000,flight:17,tags:['Carnival','Beaches','Christ Redeemer'],desc:'Christ the Redeemer, Copacabana Beach, samba nights, and the worlds greatest party.',img:'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=400&q=75'},
+  {city:'Buenos Aires',country:'Argentina',emoji:'\uD83D\uDC83',region:'south_america',budget:900000,flight:18,tags:['Tango','Steak','Culture'],desc:'Tango in La Boca, worlds best steak, and a city that never sleeps.',img:'https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=400&q=75'},
+  {city:'Machu Picchu',country:'Peru',emoji:'\uD83C\uDFD4\uFE0F',region:'south_america',budget:1000000,flight:20,tags:['Inca Ruins','Hiking','History'],desc:'Lost city of the Incas, Andes trekking, Sacred Valley, and Cuscos cobblestones.',img:'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=400&q=75'},
+  {city:'Cartagena',country:'Colombia',emoji:'\uD83C\uDF3A',region:'south_america',budget:750000,flight:17,tags:['Old Town','Beach','Caribbean'],desc:'Colourful colonial old town, Caribbean coast, and magical Gabriel Garcia Marquez vibes.',img:'https://images.unsplash.com/photo-1583531352515-8884af319dc1?w=400&q=75'},
+  {city:'Cape Town',country:'South Africa',emoji:'\uD83C\uDF0B',region:'africa',budget:900000,flight:12,tags:['Table Mountain','Penguins','Wine'],desc:'Table Mountain cable car, Boulders Beach penguins, and Cape Winelands.',img:'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=400&q=75'},
+  {city:'Marrakech',country:'Morocco',emoji:'\uD83D\uDD4C',region:'africa',budget:600000,flight:8,tags:['Medina','Souks','Riads'],desc:'Labyrinth medina, rooftop riads, Djemaa el-Fna chaos, and argan oil everything.',img:'https://images.unsplash.com/photo-1597212720158-a6a1f1161f9d?w=400&q=75'},
+  {city:'Zanzibar',country:'Tanzania',emoji:'\uD83C\uDF0A',region:'africa',budget:900000,flight:9,tags:['Beach','Spice Island','Diving'],desc:'Turquoise ocean, Swahili Stone Town, spice tours, and dhow sunsets.',img:'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400&q=75'},
+  {city:'Nairobi',country:'Kenya',emoji:'\uD83E\uDD81',region:'africa',budget:1100000,flight:8,tags:['Safari','Maasai Mara','Wildlife'],desc:'Gateway to Maasai Mara - lions at sunrise, elephant orphanage, giraffe centre.',img:'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&q=75'},
+  {city:'Cairo',country:'Egypt',emoji:'\uD83C\uDFFA',region:'africa',budget:650000,flight:7,tags:['Pyramids','Nile','History'],desc:'Giza at sunrise, the Egyptian Museum, Nile felucca rides, and Khan el-Khalili.',img:'https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=400&q=75'},
+  {city:'Serengeti',country:'Tanzania',emoji:'\uD83E\uDD92',region:'africa',budget:1800000,flight:10,tags:['Safari','Migration','Wildlife'],desc:'The Great Migration, Big Five safaris, endless plains, and sleeping under the stars.',img:'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=400&q=75'},
+  {city:'Sydney',country:'Australia',emoji:'\uD83E\uDD98',region:'oceania',budget:1400000,flight:12,tags:['Opera House','Bondi','Lifestyle'],desc:'Opera House, Bondi Beach sunrise, and the most liveable city on Earth.',img:'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400&q=75'},
+  {city:'Queenstown',country:'New Zealand',emoji:'\uD83C\uDFD4\uFE0F',region:'oceania',budget:1300000,flight:14,tags:['Adventure','Fjords','Skiing'],desc:'Bungee jumping, Fiordland, skiing, and Tolkien landscapes around every bend.',img:'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=400&q=75'},
+  {city:'Melbourne',country:'Australia',emoji:'\uD83C\uDFA8',region:'oceania',budget:1350000,flight:12,tags:['Coffee','Art','Food'],desc:'Worlds most liveable city - laneway coffee culture, street art, and incredible food.',img:'https://images.unsplash.com/photo-1514395462725-fb4566210144?w=400&q=75'},
+  {city:'Bora Bora',country:'French Polynesia',emoji:'\uD83C\uDF3A',region:'oceania',budget:2000000,flight:18,tags:['Overwater Bungalows','Lagoon','Romance'],desc:'Overwater villas above impossible blue lagoons - pure paradise.',img:'https://images.unsplash.com/photo-1589197331516-4d84c1a4f85a?w=400&q=75'}
+];
+
+const FRIENDS=[{name:'Aarav',emoji:'\uD83E\uDDD1'},{name:'Priya',emoji:'\uD83D\uDC69'},{name:'Zara',emoji:'\uD83D\uDC71'},{name:'Rohan',emoji:'\uD83E\uDDD4'},{name:'Mia',emoji:'\uD83E\uDDD5'}];
+
+let activeRegion='all',maxBudget=2000000,maxFlight=24;
+let visitState={},selectedCities=[],filteredDests=[],dragSrc=null;
+
+/* ── NAV STATS ── */
+function updNavStats(){
+  const ns=document.getElementById('navstats');
+  if(!ns){return;}
+  if(!selectedCities.length){ns.innerHTML='';return;}
+  const n=selectedCities.length;
+  const totalB=selectedCities.reduce((s,i)=>{const d=filteredDests[i];return d?s+d.budget:s;},0);
+  const totalF=selectedCities.reduce((s,i)=>{const d=filteredDests[i];return d?s+d.flight:s;},0);
+  ns.innerHTML='<span style="color:var(--a);font-weight:700;">'+n+' cit'+(n===1?'y':'ies')+'</span>'
+    +' <span style="opacity:.3">|</span> '
+    +'<span style="color:var(--gold);">\u20B9'+totalB.toLocaleString('en-IN')+'</span>'
+    +' <span style="opacity:.3">|</span> '
+    +'<span>\u2708\uFE0F '+totalF+'h</span>';
+}
+
+/* ── BUDGET SLIDER ── */
+function updB(){
+  const mn=+document.getElementById('bmin').value;
+  const mx2=+document.getElementById('bmax').value;
+  const p1=mn/2000000*100,p2=mx2/2000000*100;
+  const f=document.getElementById('bfill');
+  f.style.cssText='position:absolute;height:4px;left:'+p1+'%;width:'+(p2-p1)+'%';
+  document.getElementById('bval').textContent='\u20B9'+mn.toLocaleString('en-IN')+' - \u20B9'+mx2.toLocaleString('en-IN');
+  maxBudget=mx2;
+}
+document.getElementById('bmin').addEventListener('input',function(){
+  if(+this.value>+document.getElementById('bmax').value-25000)this.value=+document.getElementById('bmax').value-25000;
+  updB();
+});
+document.getElementById('bmax').addEventListener('input',function(){
+  if(+this.value<+document.getElementById('bmin').value+25000)this.value=+document.getElementById('bmin').value+25000;
+  updB();
+});
+updB();
+
+/* ── FLIGHT SLIDER ── */
+function updF(){
+  const v=+document.getElementById('fslider').value;
+  const f=document.getElementById('ffill');
+  f.style.cssText='position:absolute;height:4px;left:0;width:'+v/24*100+'%';
+  document.getElementById('fval').textContent='Up to '+v+'h';
+  maxFlight=v;
+}
+document.getElementById('fslider').addEventListener('input',updF);
+updF();
+
+/* ── REGION BUTTONS ── */
+document.querySelectorAll('.rg').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.rg').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    activeRegion=b.dataset.r;
+  });
+});
+
+/* ── APPLY FILTERS & GO ── */
+function applyAndGo(){
+  const btn=document.getElementById('gobtn');
+  btn.textContent='Finding...';btn.style.opacity='.65';
+  filteredDests=DESTS.filter(d=>{
+    const rOk=activeRegion==='all'||d.region===activeRegion;
+    const bOk=d.budget<=maxBudget;
+    const fOk=d.flight<=maxFlight;
+    return rOk&&bOk&&fOk;
+  });
+  if(filteredDests.length===0){
+    filteredDests=DESTS.filter(d=>activeRegion==='all'||d.region===activeRegion);
+  }
+  const rl=document.querySelector('.rg.on')?.textContent?.trim()||'All';
+  document.getElementById('pg3t').textContent='Results - '+rl.replace(/^.\s/,'');
+  document.getElementById('pg3s').textContent=(filteredDests.length===0?'No destinations found. Try wider filters.':filteredDests.length+' destinations match your filters. Toggle to wishlist.');
+  buildCards();
+  window.filteredDests=filteredDests;
+  setTimeout(()=>{btn.textContent='\uD83C\uDF0D Show Me Destinations \u2192';btn.style.opacity='1';goTo(2);},400);
+}
+
+/* ── BUILD CARDS ── */
+function buildCards(){
+  const grid=document.getElementById('cgrid');
+  grid.innerHTML='';visitState={};selectedCities=[];
+  filteredDests.forEach((d,i)=>{
+    visitState[i]=false;
+    const score=Math.floor(55+Math.random()*40);
+    const fw=Math.floor(Math.random()*3)+2;
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=
+      '<div class="cimgw"><img class="cimg" src="'+d.img+'" alt="'+d.city+'" loading="lazy" onerror="this.style.display=\'none\'"><div class="cbadge">'+d.region.replace('_',' ')+'</div></div>'
+      +'<div class="cbody">'
+      +'<div class="ccity">'+d.emoji+' '+d.city+'</div>'
+      +'<div class="ccntry">'+d.country+'</div>'
+      +'<div class="cmeta"><span>\uD83D\uDCB8 <strong>\u20B9'+d.budget.toLocaleString('en-IN')+'</strong></span><span>\u2708\uFE0F <strong>~'+d.flight+'h</strong></span><span>\uD83D\uDC65 <strong>'+fw+'/5</strong></span></div>'
+      +'<div class="ctags">'+d.tags.map(t=>'<span class="tag">'+t+'</span>').join('')+'</div>'
+      +'<div class="cdesc">'+d.desc+'</div>'
+      +'<div class="wtv" id="wtv'+i+'" onclick="tv('+i+')">'
+      +'<div><div class="wq">Want to visit?</div><div class="ws" id="ws'+i+'">Tap to decide</div></div>'
+      +'<div class="sw" id="swi'+i+'"></div>'
+      +'</div>'
+      +'</div>';
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform='perspective(700px) rotateY('+(x*9)+'deg) rotateX('+(-y*9)+'deg) scale(1.015)';
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='';});
+    grid.appendChild(card);
+  });
+  rebuildCL();rebuildDL();
+}
+
+/* ── TOGGLE VISIT ── */
+async function tv(i){
+  visitState[i]=!visitState[i];
+  const w=document.getElementById('wtv'+i);
+  const s=document.getElementById('ws'+i);
+  const sw=document.getElementById('swi'+i);
+  if(visitState[i]){
+    w.classList.add('yes');w.classList.remove('no');
+    s.textContent='Yes, I want to go!';
+    if(sw)sw.style.background='var(--a)';
+    if(!selectedCities.includes(i))selectedCities.push(i);
+  }else{
+    w.classList.remove('yes');w.classList.add('no');
+    s.textContent='Not this time';
+    if(sw)sw.style.background='var(--rose)';
+    selectedCities=selectedCities.filter(x=>x!==i);
+  }
+  rebuildCL();rebuildDL();updNavStats();
+  window.selectedCities=selectedCities;
+  if(window.globeDrawArcs)window.globeDrawArcs();
+  if(window.currentTripId){
+    await saveVote(filteredDests[i].city,visitState[i]);
+  }
+}
+
+/* ── CITY CHECKLIST ── */
+function rebuildCL(){
+  updNavStats();
+  const cl=document.getElementById('clist');cl.innerHTML='';
+  filteredDests.forEach((d,i)=>{
+    const sel=selectedCities.includes(i);
+    const item=document.createElement('div');
+    item.className='ci'+(sel?' sel':'');
+    item.innerHTML='<div class="cb">'+(sel?'\u2713':'')+'</div><span class="ce">'+d.emoji+'</span><span class="cn">'+d.city+'</span>';
+    item.onclick=()=>{
+      if(sel)selectedCities=selectedCities.filter(x=>x!==i);
+      else selectedCities.push(i);
+      rebuildCL();rebuildDL();updNavStats();
+      window.selectedCities=selectedCities;
+      if(window.globeDrawArcs)window.globeDrawArcs();
+    };
+    cl.appendChild(item);
+  });
+}
+
+/* ── DRAG REORDER ── */
+function rebuildDL(){
+  const dl=document.getElementById('dlist');dl.innerHTML='';
+  if(!selectedCities.length){
+    dl.innerHTML='<p style="font-size:.65rem;color:var(--mu);padding:.4rem 0">Select cities above to set order.</p>';
+    return;
+  }
+  selectedCities.forEach((di,pos)=>{
+    const d=filteredDests[di];if(!d)return;
+    const item=document.createElement('div');
+    item.className='di';item.draggable=true;
+    item.innerHTML='<div class="dn">'+(pos+1)+'</div><div class="de">'+d.emoji+'</div><div class="dname">'+d.city+', '+d.country+'</div><div class="dh">\u283F\u283F</div>';
+    item.addEventListener('dragstart',e=>{dragSrc=pos;item.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    item.addEventListener('dragend',()=>{item.classList.remove('dragging');document.querySelectorAll('.di').forEach(x=>x.classList.remove('over'));});
+    item.addEventListener('dragover',e=>{e.preventDefault();item.classList.add('over');});
+    item.addEventListener('dragleave',()=>item.classList.remove('over'));
+    item.addEventListener('drop',e=>{
+      e.preventDefault();item.classList.remove('over');
+      if(dragSrc===null||dragSrc===pos)return;
+      const moved=selectedCities.splice(dragSrc,1)[0];
+      selectedCities.splice(pos,0,moved);
+      rebuildDL();rebuildCL();
+      window.selectedCities=selectedCities;
+    });
+    dl.appendChild(item);
+  });
+}
+
+/* ── CONFIRM TRIP ── */
+function confirmTrip(){
+  if(!selectedCities.length){alert('Pick at least one city!');return;}
+  buildCube();buildTimeline();buildVerdict();
+  if(window.globeDrawArcs)window.globeDrawArcs();
+  goTo(3);
+}
+
+/* ── CUBE ── */
+function buildCube(){
+  const faces=['cf0','cf1','cf2','cf3','cf4','cf5'];
+  const stops=document.getElementById('cstops');stops.innerHTML='';
+  const defs=['🌆','🏖️','🌿','✨','🎭','🏔️'];
+  selectedCities.slice(0,6).forEach((di,pos)=>{
+    const d=filteredDests[di];if(!d)return;
+    const face=document.getElementById(faces[pos]);
+    if(face)face.innerHTML='<div class="cfl"><div class="cfem">'+d.emoji+'</div><small>'+d.city+'</small></div>';
+    const s=document.createElement('div');s.className='cs';
+    s.innerHTML='<div class="csn">'+(pos+1)+'</div><div class="cse">'+d.emoji+'</div><div class="csname">'+d.city+', '+d.country+'</div><div class="cstag">\u20B9'+(d.budget/1000).toFixed(0)+'k</div>';
+    stops.appendChild(s);
+  });
+  for(let i=selectedCities.length;i<6;i++){
+    const face=document.getElementById(faces[i]);
+    if(face)face.innerHTML='<div class="cfl"><div class="cfem">'+defs[i]+'</div><small>Add more</small></div>';
+  }
+}
+
+/* ── TIMELINE ── */
+function buildTimeline(){
+  const tl=document.getElementById('tl');tl.innerHTML='';
+  const base=[
+    {time:'Week before',event:'Squad chat explodes',detail:'Everyone drops wishlist destinations. TripSync chosen.',emoji:'\uD83D\uDCAC',done:true},
+    {time:'Day 1',event:'Filters set',detail:'Budget, region, flight time locked in.',emoji:'\uD83C\uDFAF',done:true},
+    {time:'Day 2',event:'Voting done',detail:'Cards toggled, itinerary confirmed.',emoji:'\uD83D\uDDF3\uFE0F',done:true},
+  ];
+  selectedCities.forEach((di,pos)=>{
+    const d=filteredDests[di];if(!d)return;
+    base.push({time:'Stop '+(pos+1),event:d.city+' '+d.emoji,detail:d.country+' \u00B7 ~'+d.flight+'h \u00B7 \u20B9'+d.budget.toLocaleString('en-IN'),emoji:d.emoji,done:true,order:pos+1});
+  });
+  base.push({time:'Return',event:'Home & already planning next',detail:'The best memories made with your squad.',emoji:'\uD83C\uDFE0',done:false});
+  base.forEach(t=>{
+    const item=document.createElement('div');item.className='tli';
+    item.innerHTML='<div class="tldot '+(t.done?'done':'')+'"></div>'
+      +'<div class="tlbox"><div class="tlem">'+t.emoji+'</div>'+(t.order?'<div class="tlnum">'+t.order+'</div>':'')+'</div>'
+      +'<div class="tltime">'+t.time+'</div><div class="tlev">'+t.event+'</div><div class="tldet">'+t.detail+'</div>';
+    tl.appendChild(item);
+  });
+  let tlD=false,tlSX=0,tlSL=0;
+  tl.addEventListener('mousedown',e=>{tlD=true;tlSX=e.pageX-tl.offsetLeft;tlSL=tl.scrollLeft;});
+  window.addEventListener('mouseup',()=>tlD=false);
+  window.addEventListener('mousemove',e=>{if(!tlD)return;e.preventDefault();tl.scrollLeft=tlSL-(e.pageX-tl.offsetLeft-tlSX);});
+}
+
+/* ── VERDICT ── */
+function buildVerdict(){
+  if(!selectedCities.length)return;
+  const first=filteredDests[selectedCities[0]];if(!first)return;
+  const vimgw=document.getElementById('vimgw');vimgw.innerHTML='';
+  const img=document.createElement('img');
+  img.src=first.img;img.alt=first.city;
+  img.style.cssText='width:100%;height:160px;object-fit:cover;border-radius:8px;display:block;';
+  img.onerror=()=>{vimgw.innerHTML='<div class="vemoji">'+first.emoji+'</div>';};
+  vimgw.appendChild(img);
+  document.getElementById('vcity').textContent=first.city;
+  const totalB=selectedCities.reduce((s,i)=>{const d=filteredDests[i];return d?s+d.budget:s;},0);
+  const totalF=selectedCities.reduce((s,i)=>{const d=filteredDests[i];return d?s+d.flight:s;},0);
+  document.getElementById('vsub').innerHTML='First stop \u00B7 <strong>\u20B9'+first.budget.toLocaleString('en-IN')+'</strong> \u00B7 ~'+first.flight+'h<br>'
+    +'<span style="font-size:.65rem;color:var(--gold);">Full trip: \u20B9'+totalB.toLocaleString('en-IN')+' total \u00B7 '+totalF+'h flying</span>';
+  const vstops=document.getElementById('vstops');vstops.innerHTML='';
+  selectedCities.forEach((di,pos)=>{
+    const d=filteredDests[di];if(!d)return;
+    if(pos>0){const sep=document.createElement('span');sep.className='vsep';sep.textContent='\u2192';vstops.appendChild(sep);}
+    const s=document.createElement('div');s.className='vstop';
+    s.innerHTML='<span class="sn">'+(pos+1)+'</span>'+d.emoji+' '+d.city;
+    vstops.appendChild(s);
+  });
+  const vf=document.getElementById('vfriends');vf.innerHTML='';
+  FRIENDS.forEach(f=>{const el=document.createElement('div');el.className='vf';el.textContent=f.emoji+' '+f.name;vf.appendChild(el);});
+  setTimeout(launchConfetti,300);
+}
+
+/* ── CONFETTI ── */
+function launchConfetti(){
+  const colors=['#3DFFC0','#F7C948','#FF6B8A','#5BCFFF','#b8ff57'];
+  const cv=document.createElement('canvas');
+  cv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:8888;';
+  document.body.appendChild(cv);
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const ctx=cv.getContext('2d');
+  const pieces=Array.from({length:120},()=>({
+    x:Math.random()*cv.width,y:-10,r:Math.random()*6+3,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    vx:(Math.random()-.5)*4,vy:Math.random()*4+2,
+    rot:Math.random()*360,vrot:(Math.random()-.5)*8,
+    shape:Math.random()>.5?'circle':'rect',alpha:1
+  }));
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    pieces.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.vrot;p.vy+=.06;
+      if(frame>80)p.alpha=Math.max(0,p.alpha-.012);
+      ctx.save();ctx.globalAlpha=p.alpha;ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.color;
+      if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();}
+      else{ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);}
+      ctx.restore();
+    });
+    frame++;
+    if(frame<150)requestAnimationFrame(draw);else cv.remove();
+  }
+  draw();
+}
+
+/* ── GLOBE ARC SYSTEM ── */
+(function setupArcs(){
+  function trySetup(){
+    if(window._globeScene){init();}
+    else{setTimeout(trySetup,300);}
+  }
+  function init(){
+    const CITY_POS={
+      'Goa':{lat:15.3,lon:73.9},'Manali':{lat:32.2,lon:77.2},'Jaipur':{lat:26.9,lon:75.8},
+      'Kerala':{lat:10.8,lon:76.3},'Varanasi':{lat:25.3,lon:83},'Andaman Islands':{lat:11.7,lon:92.7},
+      'Bali':{lat:-8.3,lon:115},'Bangkok':{lat:13.7,lon:100.5},'Phuket':{lat:7.9,lon:98.4},
+      'Hanoi':{lat:21,lon:105.8},'Singapore':{lat:1.3,lon:103.8},'Tokyo':{lat:35.7,lon:139.7},
+      'Kyoto':{lat:35,lon:135.8},'Seoul':{lat:37.6,lon:127},'Dubai':{lat:25.2,lon:55.3},
+      'Istanbul':{lat:41,lon:29},'Maldives':{lat:3.2,lon:73},'Colombo':{lat:6.9,lon:79.8},
+      'Kathmandu':{lat:27.7,lon:85.3},'Tbilisi':{lat:41.7,lon:44.8},
+      'Paris':{lat:48.9,lon:2.3},'Barcelona':{lat:41.4,lon:2.2},'Rome':{lat:41.9,lon:12.5},
+      'Athens':{lat:38,lon:23.7},'Prague':{lat:50.1,lon:14.4},'Amsterdam':{lat:52.4,lon:4.9},
+      'Santorini':{lat:36.4,lon:25.4},'Lisbon':{lat:38.7,lon:-9.1},'Reykjavik':{lat:64.1,lon:-21.9},
+      'Dubrovnik':{lat:42.6,lon:18.1},'New York':{lat:40.7,lon:-74},'Cancun':{lat:21.2,lon:-86.8},
+      'Mexico City':{lat:19.4,lon:-99.1},'Havana':{lat:23.1,lon:-82.4},'Jamaica':{lat:18,lon:-77},
+      'Rio de Janeiro':{lat:-22.9,lon:-43.2},'Buenos Aires':{lat:-34.6,lon:-58.4},
+      'Machu Picchu':{lat:-13.2,lon:-72.5},'Cartagena':{lat:10.4,lon:-75.5},
+      'Cape Town':{lat:-33.9,lon:18.4},'Marrakech':{lat:31.6,lon:-7.9},
+      'Zanzibar':{lat:-6.2,lon:39.2},'Nairobi':{lat:-1.3,lon:36.8},'Cairo':{lat:30,lon:31.2},
+      'Serengeti':{lat:-2.3,lon:34.8},'Sydney':{lat:-33.9,lon:151.2},
+      'Queenstown':{lat:-45,lon:168.7},'Melbourne':{lat:-37.8,lon:145},'Bora Bora':{lat:-16.5,lon:-151.7}
+    };
+    let arcMeshes=[];
+    function ll2v(lat,lon,r){
+      const phi=(90-lat)*Math.PI/180,theta=(lon+180)*Math.PI/180;
+      return new THREE.Vector3(-Math.sin(phi)*Math.cos(theta)*r,Math.cos(phi)*r,Math.sin(phi)*Math.sin(theta)*r);
+    }
+    window.globeDrawArcs=function(){
+      arcMeshes.forEach(m=>{if(window._globeScene)window._globeScene.remove(m);});
+      arcMeshes=[];
+      const sel=window.selectedCities||[];
+      const fd=window.filteredDests||[];
+      if(sel.length<2)return;
+      for(let i=0;i<sel.length-1;i++){
+        const da=fd[sel[i]],db=fd[sel[i+1]];if(!da||!db)continue;
+        const pa_pos=CITY_POS[da.city]||{lat:0,lon:0};
+        const pb_pos=CITY_POS[db.city]||{lat:0,lon:0};
+        const pa=ll2v(pa_pos.lat,pa_pos.lon,1);
+        const pb=ll2v(pb_pos.lat,pb_pos.lon,1);
+        const mid=pa.clone().add(pb).multiplyScalar(.5).normalize().multiplyScalar(1.45);
+        const pts=[];
+        for(let t=0;t<=60;t++){
+          const u=t/60;
+          pts.push(new THREE.Vector3()
+            .copy(pa).multiplyScalar((1-u)*(1-u))
+            .add(mid.clone().multiplyScalar(2*u*(1-u)))
+            .add(pb.clone().multiplyScalar(u*u)));
+        }
+        const curve=new THREE.CatmullRomCurve3(pts);
+        const geo=new THREE.TubeGeometry(curve,60,.007,6,false);
+        const mat=new THREE.MeshBasicMaterial({color:0x3DFFC0,transparent:true,opacity:.65});
+        const tube=new THREE.Mesh(geo,mat);
+        window._globeScene.add(tube);arcMeshes.push(tube);
+        const dotGeo=new THREE.SphereGeometry(.022,8,8);
+        const dotMat=new THREE.MeshBasicMaterial({color:0xF7C948});
+        const dot=new THREE.Mesh(dotGeo,dotMat);
+        dot.userData={arcPts:pts,arcT:i*.3};
+        window._globeScene.add(dot);arcMeshes.push(dot);
+      }
+    };
+  }
+  trySetup();
+})();
+
+/* ── THREE.JS HERO GLOBE ── */
+(function(){
+  const canvas=document.getElementById('globeC');
+  if(!canvas)return;
+  const S=Math.min(window.innerWidth*.5,580);
+  canvas.width=S;canvas.height=S;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(S,S);
+  const scene=new THREE.Scene();window._globeScene=scene;
+  const camera=new THREE.PerspectiveCamera(42,1,.1,100);
+  camera.position.z=2.75;
+
+  function mkTex(){
+    const tc=document.createElement('canvas');tc.width=2048;tc.height=1024;
+    const c=tc.getContext('2d');
+    const og=c.createLinearGradient(0,0,0,1024);
+    og.addColorStop(0,'#061428');og.addColorStop(.5,'#09183a');og.addColorStop(1,'#050e20');
+    c.fillStyle=og;c.fillRect(0,0,2048,1024);
+    for(let i=0;i<1000;i++){c.beginPath();c.arc(Math.random()*2048,Math.random()*1024,Math.random()*1.1,0,Math.PI*2);c.fillStyle='rgba(61,255,192,'+(Math.random()*.055)+')';c.fill();}
+    c.strokeStyle='rgba(61,255,192,.055)';c.lineWidth=.8;
+    for(let x=0;x<=2048;x+=2048/24){c.beginPath();c.moveTo(x,0);c.lineTo(x,1024);c.stroke();}
+    for(let y=0;y<=1024;y+=1024/12){c.beginPath();c.moveTo(0,y);c.lineTo(2048,y);c.stroke();}
+    function px(lat,lon){return[(lon+180)/360*2048,(90-lat)/180*1024];}
+    function poly(pts,fill){
+      c.beginPath();c.moveTo(...px(...pts[0]));
+      for(let i=1;i<pts.length;i++)c.lineTo(...px(...pts[i]));
+      c.closePath();c.fillStyle=fill||'#1e6b35';c.fill();
+      c.strokeStyle='rgba(30,107,53,.3)';c.lineWidth=.6;c.stroke();
+    }
+    poly([[71,-156],[70,-148],[68,-166],[65,-168],[60,-162],[58,-152],[56,-134],[50,-127],[46,-124],[38,-122],[32,-117],[28,-110],[22,-106],[18,-95],[18,-88],[15,-86],[10,-83],[9,-79],[10,-78],[12,-83],[18,-94],[22,-98],[28,-112],[32,-117],[36,-122],[46,-124],[54,-130],[58,-136],[60,-147],[64,-166],[68,-166],[70,-148],[71,-156]]);
+    poly([[56,-160],[54,-162],[52,-170],[50,-176],[52,-176],[54,-162],[56,-160]]);
+    poly([[18,-88],[15,-86],[10,-83],[8,-77],[8,-79],[10,-82],[14,-87],[18,-94],[20,-90],[18,-88]]);
+    poly([[10,-62],[8,-60],[4,-52],[0,-50],[-5,-35],[-10,-37],[-18,-39],[-28,-48],[-38,-60],[-44,-65],[-55,-68],[-50,-73],[-38,-64],[-18,-68],[-10,-78],[-6,-80],[2,-78],[6,-77],[8,-62],[10,-62]]);
+    poly([[70,28],[68,22],[63,5],[58,8],[54,8],[52,2],[48,2],[44,4],[42,8],[44,10],[48,14],[52,10],[56,12],[60,18],[64,26],[68,20],[70,26],[70,28]]);
+    poly([[70,28],[66,14],[62,6],[58,6],[56,8],[56,12],[58,14],[62,22],[66,28],[68,26],[70,28]]);
+    poly([[58,-4],[52,-4],[50,-4],[52,0],[56,-2],[58,-4]]);
+    poly([[44,-8],[36,-8],[36,-6],[38,0],[42,2],[44,0],[44,-8]]);
+    poly([[44,8],[40,12],[38,16],[38,14],[42,10],[44,8]]);
+    poly([[37,10],[30,10],[15,18],[5,2],[0,-10],[0,-16],[-10,-14],[-25,-16],[-35,-18],[-34,18],[-28,32],[-14,38],[0,42],[10,44],[18,40],[28,32],[36,22],[38,10],[37,10]]);
+    poly([[-14,44],[-22,44],[-24,46],[-18,48],[-14,48],[-14,44]]);
+    poly([[28,34],[22,38],[16,42],[12,44],[12,52],[18,56],[22,60],[26,56],[28,48],[32,44],[36,38],[34,36],[28,34]]);
+    poly([[70,30],[60,54],[50,56],[42,52],[36,36],[38,55],[46,60],[56,62],[65,56],[70,46],[72,56],[70,80],[66,92],[62,104],[58,102],[54,100],[50,108],[46,112],[42,120],[36,120],[38,104],[42,96],[46,88],[50,88],[56,84],[60,74],[64,64],[68,60],[70,52],[72,48],[74,42],[74,28],[70,28],[70,30]]);
+    poly([[22,68],[28,78],[22,88],[10,78],[8,78],[10,80],[18,84],[28,97],[26,86],[16,80],[8,78],[10,72],[18,72],[22,68]]);
+    poly([[8,80],[6,80],[6,82],[8,82],[8,80]]);
+    poly([[22,102],[16,102],[10,100],[6,102],[4,108],[8,110],[16,106],[22,104],[22,102]]);
+    poly([[4,96],[0,100],[-4,104],[-4,108],[0,108],[4,106],[4,100],[4,96]]);
+    poly([[-6,106],[-8,110],[-8,114],[-6,108],[-6,106]]);
+    poly([[6,114],[0,108],[0,110],[2,116],[6,118],[8,116],[8,114],[6,114]]);
+    poly([[18,122],[14,122],[14,124],[18,124],[18,122]]);
+    poly([[34,130],[38,140],[42,142],[44,144],[44,142],[40,140],[36,136],[34,132],[34,130]]);
+    poly([[34,126],[38,128],[38,130],[34,128],[34,126]]);
+    poly([[-14,128],[-18,148],[-32,152],[-38,148],[-38,142],[-32,132],[-22,114],[-16,124],[-14,128]]);
+    poly([[-36,174],[-44,170],[-46,168],[-44,172],[-36,174]]);
+    poly([[-4,140],[-8,146],[-8,148],[-4,146],[0,140],[-2,138],[-4,140]]);
+    poly([[76,-18],[82,-30],[84,-40],[80,-60],[72,-52],[64,-42],[62,-44],[68,-52],[80,-44],[82,-36],[78,-22],[76,-18]]);
+    const iceN=c.createLinearGradient(0,0,0,90);iceN.addColorStop(0,'rgba(220,238,255,.7)');iceN.addColorStop(1,'transparent');
+    c.fillStyle=iceN;c.fillRect(0,0,2048,90);
+    const iceS=c.createLinearGradient(0,940,0,1024);iceS.addColorStop(0,'transparent');iceS.addColorStop(1,'rgba(220,238,255,.65)');
+    c.fillStyle=iceS;c.fillRect(0,940,2048,84);
+    return new THREE.CanvasTexture(tc);
+  }
+
+  const globe=new THREE.Mesh(
+    new THREE.SphereGeometry(1,64,64),
+    new THREE.MeshPhongMaterial({map:mkTex(),specular:new THREE.Color(0x0a1830),shininess:12,emissive:new THREE.Color(0x020408)})
+  );
+  scene.add(globe);window._globeGlobe=globe;
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.07,32,32),new THREE.MeshBasicMaterial({color:0x3dffc0,transparent:true,opacity:.03,side:THREE.BackSide})));
+  const wire=new THREE.Mesh(new THREE.SphereGeometry(1.002,24,24),new THREE.MeshBasicMaterial({color:0x3dffc0,wireframe:true,transparent:true,opacity:.03}));
+  scene.add(wire);
+  const er=new THREE.Mesh(new THREE.RingGeometry(1.014,1.02,64),new THREE.MeshBasicMaterial({color:0x3dffc0,side:THREE.DoubleSide,transparent:true,opacity:.18}));
+  er.rotation.x=Math.PI/2;scene.add(er);
+
+  const CITY_DOTS=[
+    {lat:15.3,lon:73.9,c:0x3DFFC0},{lat:35.7,lon:139.7,c:0xF7C948},{lat:-8.3,lon:115,c:0xF7C948},
+    {lat:25.2,lon:55.3,c:0xFF6B8A},{lat:48.9,lon:2.3,c:0x5BCFFF},{lat:40.7,lon:-74,c:0x5BCFFF},
+    {lat:-33.9,lon:151.2,c:0x3DFFC0},{lat:38,lon:23.7,c:0xFF6B8A},{lat:-22.9,lon:-43.2,c:0xF7C948},
+    {lat:31.6,lon:-7.9,c:0xFF6B8A},{lat:1.3,lon:103.8,c:0x3DFFC0},{lat:41,lon:29,c:0x5BCFFF}
+  ];
+  const dotMeshes=[];const pulseMeshes=[];
+  CITY_DOTS.forEach(p=>{
+    const phi=(90-p.lat)*Math.PI/180,theta=(p.lon+180)*Math.PI/180;
+    const x=-Math.sin(phi)*Math.cos(theta),y=Math.cos(phi),z=Math.sin(phi)*Math.sin(theta);
+    const dm=new THREE.Mesh(new THREE.SphereGeometry(.028,8,8),new THREE.MeshBasicMaterial({color:p.c}));
+    dm.position.set(x,y,z);globe.add(dm);dotMeshes.push(dm);
+    const pr=new THREE.Mesh(new THREE.RingGeometry(.04,.068,16),new THREE.MeshBasicMaterial({color:p.c,side:THREE.DoubleSide,transparent:true,opacity:.55}));
+    pr.position.set(x*1.012,y*1.012,z*1.012);pr.lookAt(new THREE.Vector3(x*3,y*3,z*3));
+    pr.userData={pulse:true,base:.55};globe.add(pr);pulseMeshes.push(pr);
+  });
+
+  scene.add(new THREE.AmbientLight(0x2a3f55,1.3));
+  const dl=new THREE.DirectionalLight(0x88bbee,2.8);dl.position.set(4,3,5);scene.add(dl);
+  const dl2=new THREE.DirectionalLight(0xff8844,.3);dl2.position.set(-4,-2,-3);scene.add(dl2);
+
+  let rotY=.4,rotX=.12,velX=.004,isDrag=false,pX=0,pY=0;
+  let animTY=null,animTX=null;
+
+  window.globeAnimateTo=function(lat,lon,cb){
+    animTX=-(lat*Math.PI/180);animTY=-(lon*Math.PI/180)+Math.PI;velX=0;
+    setTimeout(()=>{if(cb)cb();},2500);
+  };
+
+  canvas.addEventListener('mousedown',e=>{isDrag=true;pX=e.clientX;pY=e.clientY;animTX=null;animTY=null;velX=0;});
+  window.addEventListener('mouseup',()=>isDrag=false);
+  window.addEventListener('mousemove',e=>{
+    if(!isDrag)return;
+    velX=(e.clientX-pX)*.005;rotY+=velX;rotX+=(e.clientY-pY)*.004;pX=e.clientX;pY=e.clientY;
+  });
+
+  const tip=document.getElementById('gTip');
+  const ray=new THREE.Raycaster();const mouse=new THREE.Vector2();
+  canvas.addEventListener('mousemove',e=>{
+    const r=canvas.getBoundingClientRect();
+    mouse.x=((e.clientX-r.left)/S)*2-1;mouse.y=-((e.clientY-r.top)/S)*2+1;
+    ray.setFromCamera(mouse,camera);
+    const hits=ray.intersectObjects(dotMeshes);
+    if(hits.length&&tip){tip.textContent='\uD83D\uDCCD '+hits[0].object.userData.label;tip.style.opacity='1';tip.style.left=(e.clientX-r.left+14)+'px';tip.style.top=(e.clientY-r.top-12)+'px';}
+    else if(tip)tip.style.opacity='0';
+  });
+
+  let t=0;
+  function animate(){
+    requestAnimationFrame(animate);t+=.016;
+    if(animTX!==null){rotX+=(animTX-rotX)*.04;rotY+=(animTY-rotY)*.04;}
+    else if(!isDrag){rotY+=velX;velX*=.985;if(Math.abs(velX)<.0003)velX=.004;}
+    globe.rotation.y=rotY;globe.rotation.x=Math.max(-.65,Math.min(.65,rotX));
+    wire.rotation.y=globe.rotation.y;wire.rotation.x=globe.rotation.x;
+    pulseMeshes.forEach((pr,i)=>{pr.material.opacity=pr.userData.base*(.5+.5*Math.sin(t*2.5+i));pr.scale.setScalar(1+.16*Math.sin(t*2.5+i));});
+    scene.children.forEach(obj=>{
+      if(obj.userData&&obj.userData.arcPts){
+        obj.userData.arcT=(obj.userData.arcT||0)+.004;
+        const tv=(obj.userData.arcT%1+1)%1;
+        const idx=Math.floor(tv*(obj.userData.arcPts.length-1));
+        const pt=obj.userData.arcPts[Math.min(idx,obj.userData.arcPts.length-1)];
+        if(pt)obj.position.copy(pt);
+      }
+    });
+    renderer.render(scene,camera);
+  }
+  animate();
+})();
+
+/* ── INIT ── */
+function initApp(){
+  filteredDests=DESTS.slice();
+  window.filteredDests=filteredDests;
+  window.selectedCities=selectedCities;
+  buildCards();
+}
